@@ -1,9 +1,32 @@
+import { remember } from '@epic-web/remember';
 import { PrismaClient } from '@prisma/client';
+import chalk from 'chalk';
 
-import { singleton } from './singleton.server';
+export const prisma = remember('prisma', () => {
+	const logThreshold = 20;
 
-// Hard-code a unique key, so we can look up the client when this module gets re-imported
-const prisma = singleton('prisma', () => new PrismaClient());
-prisma.$connect();
-
-export { prisma };
+	const client = new PrismaClient({
+		log: [
+			{ level: 'query', emit: 'event' },
+			{ level: 'error', emit: 'stdout' },
+			{ level: 'warn', emit: 'stdout' },
+		],
+	}) as PrismaClient;
+	client.$on('query', async (e: { duration: number; query: any }) => {
+		if (e.duration < logThreshold) return;
+		const color =
+			e.duration < logThreshold * 1.1
+				? 'green'
+				: e.duration < logThreshold * 1.2
+					? 'blue'
+					: e.duration < logThreshold * 1.3
+						? 'yellow'
+						: e.duration < logThreshold * 1.4
+							? 'redBright'
+							: 'red';
+		const dur = chalk[color](`${e.duration}ms`);
+		console.info(`prisma:query - ${dur} - ${e.query}`);
+	});
+	client.$connect();
+	return client;
+});

@@ -12,3 +12,43 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Movie {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  releaseDate DateTime
+  alreadySeen Boolean
+  rating      Int
+  trailerUrl  String
+  genres      Genre[]
+  profilePic  String
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String
+  movies Movie[]
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  password Password?
+  movies   Movie[]
+}
+
+model Password {
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}

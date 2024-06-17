@@ -1,18 +1,51 @@
 import {
 	Links,
 	Meta,
+	NavLink,
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	json,
+	useLoaderData,
 } from '@remix-run/react';
+import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
+import clsx from 'clsx';
 import stylesheet from './tailwind.css?url';
-import { LinksFunction } from '@remix-run/node';
+import { AuthenticityTokenProvider } from 'remix-utils/csrf/react';
+import { HoneypotProvider } from 'remix-utils/honeypot/react';
+import { makeTimings } from './utils/timing.server';
+import { honeypot } from './utils/honeypot.server';
+import { csrf } from './utils/csrf.server';
+import { combineHeaders } from './utils/misc';
 
 export const links: LinksFunction = () => [
 	{ rel: 'stylesheet', href: stylesheet },
 ];
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export async function loader({ request }: LoaderFunctionArgs) {
+	const timings = makeTimings('root loader');
+
+	const honeyProps = honeypot.getInputProps();
+	const [csrfToken, csrfCookieHeader] = await csrf.commitToken();
+
+	return json(
+		{
+			requestInfo: {
+				path: new URL(request.url).pathname,
+			},
+			honeyProps,
+			csrfToken,
+		},
+		{
+			headers: combineHeaders(
+				{ 'Server-Timing': timings.toString() },
+				csrfCookieHeader ? { 'set-cookie': csrfCookieHeader } : null,
+			),
+		},
+	);
+}
+
+export function Document({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
 			<head>
@@ -31,26 +64,48 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+	const data = useLoaderData<typeof loader>();
+
 	const year = new Date().getFullYear();
+	const navLinkDefaultClassName =
+		'line-clamp-2 block rounded-l-full py-2 pl-8 pr-6 lg:text-xl';
+
 	return (
-		<Layout>
-			<div className="flex h-screen flex-col items-center justify-between">
-				<header className="w-full bg-slate-800 p-4 py-6 text-white">
-					<nav>
-						<div className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
-							[TBD] Movie night 🍿
+		<AuthenticityTokenProvider token={data.csrfToken}>
+			<HoneypotProvider {...data.honeyProps}>
+				<Document>
+					<div className="flex h-screen flex-col items-center justify-between">
+						<header className="w-full bg-slate-800 p-4 py-6 text-white">
+							<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
+								<div className="">[TBD] Movie night 🍿</div>
+								<ul className="overflow-y-auto overflow-x-hidden">
+									<li className="p-1 pr-0">
+										<NavLink
+											to="movies/new"
+											className={({ isActive }) =>
+												clsx(
+													navLinkDefaultClassName,
+													isActive && 'text-green-500',
+												)
+											}
+										>
+											Add
+										</NavLink>
+									</li>
+								</ul>
+							</nav>
+						</header>
+
+						<div className="container flex-1">
+							<Outlet />
 						</div>
-					</nav>
-				</header>
 
-				<div className="container flex-1">
-					<Outlet />
-				</div>
-
-				<footer className="w-full bg-slate-800 p-4 text-center text-white">
-					<p>© {year} Jan Soldát</p>
-				</footer>
-			</div>
-		</Layout>
+						<footer className="w-full bg-slate-800 p-4 text-center text-white">
+							<p>© {year} Jan Soldát</p>
+						</footer>
+					</div>
+				</Document>
+			</HoneypotProvider>
+		</AuthenticityTokenProvider>
 	);
 }

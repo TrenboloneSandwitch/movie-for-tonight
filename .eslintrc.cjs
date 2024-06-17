@@ -23,9 +23,15 @@ module.exports = {
 		'import/no-duplicates': ['warn', { 'prefer-inline': true }],
 		'import/consistent-type-specifier-style': ['warn', 'prefer-inline'],
 		'import/order': [
-			'warn',
+			'error',
 			{
 				alphabetize: { order: 'asc', caseInsensitive: true },
+				pathGroups: [
+					{
+						pattern: '~/**',
+						group: 'external',
+					},
+				],
 				groups: [
 					'builtin',
 					'external',
