@@ -1,7 +1,7 @@
 # Movie for tonight
 
-- App for chooseing movie for the evening screening
-- **Tech Stack**: Typescript, Remix, Prisma, Tailwind Vitest,
+- App for Choosing a Movie for the Evening Screening
+- **Tech Stack**: Typescript, Remix, Prisma, Tailwind, Vitest, Zod, Conform
 
 ## Development
 
