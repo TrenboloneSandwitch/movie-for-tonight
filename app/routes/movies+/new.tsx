@@ -1,14 +1,8 @@
-import { useForm, useInputControl, getInputProps } from '@conform-to/react';
-import { getZodConstraint, parseWithZod } from '@conform-to/zod';
 import { z } from 'zod';
-import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node';
-import { Form, json, useActionData } from '@remix-run/react';
-import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
-import { HoneypotInputs } from 'remix-utils/honeypot/react';
-import { validateCSRF } from '~/utils/csrf.server';
-import { checkHoneypot } from '~/utils/honeypot.server';
-import { Field } from '~/components/forms/Field';
-import { ErrorList } from '~/components/forms/ErrorList';
+
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import { json, redirect, useLoaderData } from '@remix-run/react';
+import { SearchBar } from '~/components/SearchBar';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -17,59 +11,56 @@ export const meta: MetaFunction = () => {
 	];
 };
 
-const LoginFormSchema = z.object({
-	redirectTo: z.string().optional(),
+const UserSearchResultSchema = z.object({
+	id: z.string(),
+	username: z.string(),
+	name: z.string().nullable(),
+	imageId: z.string().nullable(),
 });
 
-export async function action({ request }: ActionFunctionArgs) {
-	const formData = await request.formData();
-	await validateCSRF(formData, request.headers);
-	checkHoneypot(formData);
-	const submission = await parseWithZod(formData, {
-		schema: intent =>
-			LoginFormSchema.transform(async (data, ctx) => {
-				if (intent?.type !== 'validate') return { ...data, session: null };
+const MoviesSearchResultsSchema = z.array(UserSearchResultSchema);
 
-				return { ...data, session: null };
-			}),
-		async: true,
+export async function loader({ request }: LoaderFunctionArgs) {
+	const searchTerm = new URL(request.url).searchParams.get('search');
+	if (searchTerm === '') {
+		return redirect('/movies/new');
+	}
+
+	const prom = new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve({
+				success: true,
+				data: { id: '1', username: 'test', name: 'test', imageId: '1' },
+			});
+		}, 1000);
 	});
-	return json({ submission, redirectTo: '/' });
+
+	const result = await prom;
+
+	if (!result.success) {
+		return json({ status: 'error', error: result?.error?.message } as const, {
+			status: 400,
+		});
+	}
+	return json({ status: 'idle', movies: result.data } as const);
 }
 
 export default function New() {
-	const actionData = useActionData<typeof action>();
+	// const actionData = useActionData<typeof action>();
+	const data = useLoaderData<typeof loader>();
+	console.log('🚀 ~ New ~ data:', data);
 
-	const [form, fields] = useForm({
-		id: 'login-form',
-		constraint: getZodConstraint(LoginFormSchema),
-		defaultValue: {},
-		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: LoginFormSchema });
-		},
-		shouldRevalidate: 'onBlur',
-	});
 	return (
 		<div className="p-4 font-sans">
 			<h1 className="text-3xl">[TBD] New page</h1>
 
 			<div className="mx-auto w-full max-w-md px-8">
-				<Form method="POST" {...form}>
-					<AuthenticityTokenInput />
-					<HoneypotInputs />
-					<Field
-						labelProps={{ children: 'Username' }}
-						inputProps={{
-							...getInputProps(fields.redirectTo, { type: 'text' }),
-							autoFocus: true,
-							className: 'lowercase',
-						}}
-						errors={fields.redirectTo.errors}
-					/>
-
-					<input {...(fields.redirectTo, { type: 'hidden' })} />
-					<ErrorList errors={form.errors} id={form.errorId} />
-				</Form>
+				<SearchBar
+					autoFocus
+					autoSubmit
+					status={data.status}
+					formAction="/movies/new"
+				/>
 			</div>
 		</div>
 	);
