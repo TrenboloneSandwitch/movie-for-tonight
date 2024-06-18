@@ -11,7 +11,8 @@ export const prisma = remember('prisma', () => {
 			{ level: 'error', emit: 'stdout' },
 			{ level: 'warn', emit: 'stdout' },
 		],
-	}) as PrismaClient;
+	});
+
 	client.$on('query', async (e: { duration: number; query: any }) => {
 		if (e.duration < logThreshold) return;
 		const color =
