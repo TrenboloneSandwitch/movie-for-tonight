@@ -1,14 +1,15 @@
 import { useFormAction, useNavigation } from '@remix-run/react';
+import { HTMLStatus } from '~/types';
 
-interface UseIsPendingProps {
+export interface UseIsPendingProps {
 	formAction?: string;
-	formMethod?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
+	formMethod?: HTMLStatus;
 	state?: 'submitting' | 'loading' | 'non-idle';
 }
 
 export function useIsPending({
 	formAction,
-	formMethod = 'POST',
+	formMethod = HTMLStatus.POST,
 	state = 'non-idle',
 }: UseIsPendingProps = {}) {
 	const contextualFormAction = useFormAction();

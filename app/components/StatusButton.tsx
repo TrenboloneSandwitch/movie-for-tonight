@@ -1,7 +1,7 @@
-import { PropsWithChildren, forwardRef } from 'react';
-import { useSpinDelay } from 'spin-delay';
 import { clsx } from 'clsx';
-import { Button, ButtonProps } from './Button';
+import { type PropsWithChildren, forwardRef } from 'react';
+import { useSpinDelay } from 'spin-delay';
+import { Button, type ButtonProps } from './Button';
 import { Icon } from './Icon';
 
 export type Status = 'pending' | 'success' | 'error' | 'idle';

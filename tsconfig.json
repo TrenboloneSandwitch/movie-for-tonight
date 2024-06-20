@@ -17,10 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"],
-      "@/icon-name": [
-        "./app/components/icons/name.d.ts",
-        "./types/icon-name.d.ts"
-      ]
+      "@/icon-name": ["./app/other/icons/name.d.ts", "./types/icon-name.d.ts"]
     },
 
     // Vite takes care of building everything, not tsc.

@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import clsx from 'clsx';
-import { ButtonHTMLAttributes, forwardRef } from 'react';
+import { type ButtonHTMLAttributes, forwardRef } from 'react';
 
 const buttonVariants = cva(
 	'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors outline-none focus-visible:ring-4 focus-within:ring-4 ring-ring ring-offset-2 disabled:pointer-events-none disabled:opacity-50',

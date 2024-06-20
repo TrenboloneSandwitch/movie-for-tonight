@@ -1,3 +1,4 @@
+import { type LinksFunction, type LoaderFunctionArgs } from '@remix-run/node';
 import {
 	Links,
 	Meta,
@@ -8,15 +9,14 @@ import {
 	json,
 	useLoaderData,
 } from '@remix-run/react';
-import { LinksFunction, LoaderFunctionArgs } from '@remix-run/node';
 import clsx from 'clsx';
-import stylesheet from './tailwind.css?url';
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react';
 import { HoneypotProvider } from 'remix-utils/honeypot/react';
-import { makeTimings } from './utils/timing.server';
-import { honeypot } from './utils/honeypot.server';
+import stylesheet from './tailwind.css?url';
 import { csrf } from './utils/csrf.server';
+import { honeypot } from './utils/honeypot.server';
 import { combineHeaders } from './utils/misc';
+import { makeTimings } from './utils/timing.server';
 
 export const links: LinksFunction = () => [
 	{ rel: 'stylesheet', href: stylesheet },

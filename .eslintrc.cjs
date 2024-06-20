@@ -9,6 +9,7 @@ module.exports = {
 		'@remix-run/eslint-config/node',
 		'prettier',
 	],
+	plugins: ["unused-imports"],
 	rules: {
 		// playwright requires destructuring in fixtures even if you don't use anything 🤷‍♂️
 		'no-empty-pattern': 'off',
@@ -23,15 +24,9 @@ module.exports = {
 		'import/no-duplicates': ['warn', { 'prefer-inline': true }],
 		'import/consistent-type-specifier-style': ['warn', 'prefer-inline'],
 		'import/order': [
-			'error',
+			'warn',
 			{
 				alphabetize: { order: 'asc', caseInsensitive: true },
-				pathGroups: [
-					{
-						pattern: '~/**',
-						group: 'external',
-					},
-				],
 				groups: [
 					'builtin',
 					'external',
@@ -42,6 +37,17 @@ module.exports = {
 				],
 			},
 		],
+		"no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_",
+            },
+        ]
 	},
 	overrides: [
 		{

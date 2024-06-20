@@ -1,7 +1,8 @@
-import { z } from 'zod';
 
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node';
+import  { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { json, redirect, useLoaderData } from '@remix-run/react';
+import { z } from 'zod';
+import { discoverMovie$ } from '~/api/moviedb';
 import { SearchBar } from '~/components/SearchBar';
 
 export const meta: MetaFunction = () => {
@@ -26,16 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		return redirect('/movies/new');
 	}
 
-	const prom = new Promise((resolve, reject) => {
-		setTimeout(() => {
-			resolve({
-				success: true,
-				data: { id: '1', username: 'test', name: 'test', imageId: '1' },
-			});
-		}, 1000);
-	});
-
-	const result = await prom;
+	const result = await discoverMovie$();
 
 	if (!result.success) {
 		return json({ status: 'error', error: result?.error?.message } as const, {
