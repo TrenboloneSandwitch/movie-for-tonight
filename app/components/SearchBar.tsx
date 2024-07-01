@@ -2,17 +2,17 @@ import { Form, useSearchParams, useSubmit } from '@remix-run/react';
 import { type FC, useId } from 'react';
 import { HoneypotInputs } from 'remix-utils/honeypot/react';
 import { useDebounce, useIsPending } from '~/hooks';
-import { HTMLStatus } from '~/types';
+import { HTMLStatus, StatusState } from '~/types';
 import { Input } from './forms/Input';
 import { Label } from './forms/Label';
 import { Icon } from './Icon';
-import { StatusButton, type Status } from './StatusButton';
+import { StatusButton, } from './StatusButton';
 
 interface SearchBarProps {
 	autoFocus: boolean;
 	autoSubmit: boolean;
 	formAction: `/${string}`;
-	status: Status;
+	status: StatusState;
 }
 
 export const SearchBar: FC<SearchBarProps> = ({
@@ -56,7 +56,7 @@ export const SearchBar: FC<SearchBarProps> = ({
 			<div>
 				<StatusButton
 					type="submit"
-					status={isSubmitting ? 'pending' : status}
+					status={isSubmitting ? StatusState.PENDING : status}
 					className="flex w-full items-center justify-center"
 					size="sm"
 				>

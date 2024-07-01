@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
 import { HTMLStatus } from '../types';
+import  { type MovieDBResponse } from './types';
 
-const discover = 'https://api.themoviedb.org/3/discover/movie';
+const SEARCH_ROUTE = 'https://api.themoviedb.org/3/search/movie';
 
 const options = {
 	method: HTMLStatus.GET,
@@ -11,11 +12,15 @@ const options = {
 	},
 };
 
-export const discoverMovie$ = () =>
-	fetch(discover, options)
+export const discoverMovie$ = async (searchTerm: string) => {
+	const paramsObj = new URLSearchParams({ query: searchTerm, include_adult: "false", language: "en-US", page: "1" });
+	const url = `${SEARCH_ROUTE}?${paramsObj.toString()}`;
+
+	return fetch(url, options)
 		.then(res => res.json())
-		.then(json => ({
-			success: true,
-			data: json,
-		}))
-		.catch(err => ({ success: false, error: err }));
+		.then((json: unknown) => {
+					return ({
+					success: true,
+					data: (json as MovieDBResponse).results,
+				}) as const})
+		.catch(err => ({ success: false, error: err }) as const)};

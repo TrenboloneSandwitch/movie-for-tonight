@@ -5,3 +5,10 @@ export enum HTMLStatus {
 	PATCH = 'PATCH',
 	DELETE = 'DELETE',
 }
+
+export enum StatusState {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	IDLE = 'IDLE',
+}

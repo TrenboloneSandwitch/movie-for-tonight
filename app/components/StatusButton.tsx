@@ -1,13 +1,13 @@
 import { clsx } from 'clsx';
 import { type PropsWithChildren, forwardRef } from 'react';
 import { useSpinDelay } from 'spin-delay';
+import { StatusState } from '~/types';
 import { Button, type ButtonProps } from './Button';
 import { Icon } from './Icon';
 
-export type Status = 'pending' | 'success' | 'error' | 'idle';
 
 interface StatusButtonProps extends ButtonProps {
-	status: Status;
+	status: StatusState;
 	message?: string | null;
 	spinDelay?: Parameters<typeof useSpinDelay>[1];
 }
@@ -17,17 +17,16 @@ const Status = ({
 	spinDelay,
 	children,
 }: PropsWithChildren<{
-	status: Status;
+	status: StatusState;
 	spinDelay?: Parameters<typeof useSpinDelay>[1];
 }>) => {
-	const delayedPending = useSpinDelay(status === 'pending', {
+	const delayedPending = useSpinDelay(status === StatusState.PENDING, {
 		delay: 400,
 		minDuration: 300,
 		...spinDelay,
 	});
 
-	console.log('🚀 ~ status:', status);
-	if (status === 'pending') {
+	if (status === StatusState.PENDING) {
 		return (
 			<div className="inline-flex h-6 w-6 items-center justify-center">
 				{delayedPending ? (
@@ -39,15 +38,15 @@ const Status = ({
 		);
 	}
 
-	if (status === 'success') {
+	if (status === StatusState.SUCCESS) {
 		return (
-			<div className="inline-flex h-6 w-6 items-center justify-center">
+			<div className="inline-flex h-6 w-6 items-center justify-center cursor-auto pointer-events-none">
 				<Icon name="check" />
 			</div>
 		);
 	}
 
-	if (status === 'error') {
+	if (status === StatusState.ERROR) {
 		return (
 			<div className="bg-destructive inline-flex h-6 w-6 items-center justify-center rounded-full">
 				<Icon name="cross-1" className="text-destructive-foreground" />
@@ -63,7 +62,7 @@ const Status = ({
 };
 
 export const StatusButton = forwardRef<HTMLButtonElement, StatusButtonProps>(
-	({ message, status, className, children, spinDelay, ...props }, ref) => {
+	({ status, className, children, spinDelay, ...props }, ref) => {
 		return (
 			<Button
 				ref={ref}
