@@ -1,3 +1,5 @@
+export const IMAGE_ROUTE = 'https://image.tmdb.org/t/p/w154';
+
 /**
  * Combine multiple header objects into one (uses append so headers are not overridden)
  */
@@ -13,3 +15,7 @@ export function combineHeaders(
 	}
 	return combined;
 }
+
+export const getMoviePosterUrl = (path?: string) => {
+	return path ? `${IMAGE_ROUTE}${path}` : '/img/placeholder.png';
+};

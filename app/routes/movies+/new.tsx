@@ -1,8 +1,12 @@
 import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node';
 import { json, redirect, useLoaderData } from '@remix-run/react';
-import { discoverMovie$ } from '~/api/moviedb';
+import clsx from 'clsx';
+import { discoverMovie$ } from '~/api';
+import { ErrorList } from '~/components/ErrorList';
+import { MovieCard } from '~/components/movies/MovieCard';
 import { SearchBar } from '~/components/SearchBar';
-import { StatusState } from '~/types';
+import { useDelayedIsPending } from '~/hooks/useDelayedIsPending';
+import { HTMLStatus, StatusState } from '~/types';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -32,8 +36,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		return redirect('/movies/new');
 	}
 
-
 	const result = await discoverMovie$(trimmedSearchTerm);
+	console.log('🚀 ~ loader ~ result:', result);
 
 	if (result.success) {
 		return json({
@@ -53,7 +57,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 export default function New() {
 	// const actionData = useActionData<typeof action>();
 	const data = useLoaderData<typeof loader>();
-	console.log("🚀 ~ New ~ data:", data)
+	const isPending = useDelayedIsPending({
+		formMethod: HTMLStatus.GET,
+		formAction: '/movies/new',
+	});
 
 	return (
 		<div className="p-4 font-sans">
@@ -67,6 +74,28 @@ export default function New() {
 					formAction="/movies/new"
 				/>
 			</div>
+			<main>
+				{data.status === StatusState.SUCCESS ? (
+					data.movies.length > 0 ? (
+						<ul
+							className={clsx(
+								'flex w-full flex-wrap items-center justify-center gap-4 delay-200',
+								{ 'opacity-50': isPending },
+							)}
+						>
+							{data.movies.map(movie => (
+								<li key={movie?.id}>
+									<MovieCard />
+								</li>
+							))}
+						</ul>
+					) : (
+						<p>No users found</p>
+					)
+				) : data.status === StatusState.ERROR ? (
+					<ErrorList errors={['There was an error parsing the results']} />
+				) : null}
+			</main>
 		</div>
 	);
 }

@@ -3,8 +3,6 @@ import * as LabelPrimitive from '@radix-ui/react-label';
 import clsx from 'clsx';
 import * as React from 'react';
 
-import { InputHTMLAttributes, forwardRef } from 'react';
-
 const labelVariants =
 	'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70';
 

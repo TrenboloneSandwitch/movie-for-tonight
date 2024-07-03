@@ -1,12 +1,11 @@
 import { Form, useSearchParams, useSubmit } from '@remix-run/react';
 import { type FC, useId } from 'react';
-import { HoneypotInputs } from 'remix-utils/honeypot/react';
 import { useDebounce, useIsPending } from '~/hooks';
 import { HTMLStatus, StatusState } from '~/types';
 import { Input } from './forms/Input';
 import { Label } from './forms/Label';
 import { Icon } from './Icon';
-import { StatusButton, } from './StatusButton';
+import { StatusButton } from './StatusButton';
 
 interface SearchBarProps {
 	autoFocus: boolean;
@@ -37,7 +36,7 @@ export const SearchBar: FC<SearchBarProps> = ({
 			className="flex flex-wrap items-center justify-center gap-2"
 			onChange={e => autoSubmit && handleFormChange(e.currentTarget)}
 		>
-			<HoneypotInputs />
+			{/* <HoneypotInputs /> */}
 			<div className="flex-1">
 				<Label htmlFor={id} className="sr-only">
 					Search
