@@ -12,6 +12,7 @@ import {
 import clsx from 'clsx';
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react';
 import { HoneypotProvider } from 'remix-utils/honeypot/react';
+import { GeneralProgressBar } from './components/GeneralProgressBar';
 import stylesheet from './tailwind.css?url';
 import { csrf } from './utils/csrf.server';
 import { honeypot } from './utils/honeypot.server';
@@ -104,6 +105,7 @@ export default function App() {
 							<p>© {year} Jan Soldát</p>
 						</footer>
 					</div>
+					<GeneralProgressBar />
 				</Document>
 			</HoneypotProvider>
 		</AuthenticityTokenProvider>

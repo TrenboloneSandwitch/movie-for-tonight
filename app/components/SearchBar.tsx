@@ -59,7 +59,9 @@ export const SearchBar: FC<SearchBarProps> = ({
 					className="flex w-full items-center justify-center"
 					size="sm"
 				>
-					<Icon name="magnifying-glass" size="sm" />
+					<div className="h-6 w-6">
+						<Icon name="magnifying-glass" size="sm" />
+					</div>
 					<span className="sr-only">Search</span>
 				</StatusButton>
 			</div>

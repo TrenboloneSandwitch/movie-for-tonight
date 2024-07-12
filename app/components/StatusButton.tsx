@@ -5,7 +5,6 @@ import { StatusState } from '~/types';
 import { Button, type ButtonProps } from './Button';
 import { Icon } from './Icon';
 
-
 interface StatusButtonProps extends ButtonProps {
 	status: StatusState;
 	message?: string | null;
@@ -26,11 +25,14 @@ const Status = ({
 		...spinDelay,
 	});
 
+	console.log('🚀 ~ status:', status);
 	if (status === StatusState.PENDING) {
 		return (
-			<div className="inline-flex h-6 w-6 items-center justify-center">
+			<div className="inline-flex items-center justify-center">
 				{delayedPending ? (
-					<Icon name="update" className="animate-spin" />
+					<div className="mr-1 h-6 w-6">
+						<Icon name="update" className="animate-spin" />
+					</div>
 				) : (
 					children
 				)}
@@ -40,7 +42,7 @@ const Status = ({
 
 	if (status === StatusState.SUCCESS) {
 		return (
-			<div className="inline-flex h-6 w-6 items-center justify-center cursor-auto pointer-events-none">
+			<div className="pointer-events-none inline-flex h-6 w-6 cursor-auto items-center justify-center">
 				<Icon name="check" />
 			</div>
 		);
@@ -48,16 +50,14 @@ const Status = ({
 
 	if (status === StatusState.ERROR) {
 		return (
-			<div className="bg-destructive inline-flex h-6 w-6 items-center justify-center rounded-full">
+			<div className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-destructive">
 				<Icon name="cross-1" className="text-destructive-foreground" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="inline-flex h-6 w-6 items-center justify-center">
-			{children}
-		</div>
+		<div className="inline-flex items-center justify-center">{children}</div>
 	);
 };
 

@@ -1,31 +1,83 @@
-export const MovieCard = () => {
+import clsx from 'clsx';
+import { useMemo, type FC } from 'react';
+import { type MovieDB } from '~/api';
+import { getMoviePosterUrl } from '~/utils/misc';
+import { type Genre, type HandleMovieSelect } from './types';
+
+interface MovieCardProps extends MovieDB {
+	genres: Genre[];
+	onMovieSelect: HandleMovieSelect;
+}
+
+const ScoreCard: FC<Pick<MovieCardProps, 'vote_average'>> = ({
+	vote_average,
+}) => {
+	const isGreen = vote_average > 7.5;
+	const isRed = vote_average < 4.5;
+	const isOrange = !isRed && !isGreen;
+
 	return (
-		<div className="flex flex-col bg-gray-100 py-6 sm:py-12">
-			<div className="max-w-sm py-3 sm:mx-auto">
-				<div className="flex max-h-56 justify-between space-x-5 border border-gray-100 bg-white p-6 shadow-lg sm:rounded-3xl">
-					<div className="w-1/3 overflow-visible">
-						<img
-							className="rounded-3xl shadow-lg"
-							src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/1LRLLWGvs5sZdTzuMqLEahb88Pc.jpg"
-							alt=""
-						/>
-					</div>
-					<div className="flex w-2/3 flex-col space-y-2">
-						<div className="flex items-start justify-between">
-							<h2 className="text-lg font-bold">Sweet Tooth: El niño ciervo</h2>
-							<div className="rounded-xl bg-yellow-400 p-2 font-bold">7.2</div>
-						</div>
-						<div>
-							<div className="text-sm text-gray-400">Genre: </div>
-							<div className="text-lg text-gray-800">2019</div>
-						</div>
-						<p className="max-h-40 overflow-y-hidden text-gray-400">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-							eiusmod tempor incididunt ut labore et dolore magna aliqua.
-						</p>
-						<div className="text-a flex text-2xl font-bold">$83.90</div>
+		<div
+			className={clsx('absolute left-2 top-2 rounded-xl p-2 font-bold', {
+				'bg-green-400': isGreen,
+				'bg-yellow-400': isOrange,
+				'bg-red-500': isRed,
+			})}
+		>
+			{vote_average.toPrecision(2)}
+		</div>
+	);
+};
+
+export const MovieCard: FC<MovieCardProps> = ({
+	onMovieSelect,
+	genres,
+	...movie
+}) => {
+	const {
+		title,
+		vote_average,
+		genre_ids,
+		release_date,
+		id,
+		poster_path,
+		overview,
+	} = movie;
+	const movieGenres = useMemo(
+		() => genres.filter(({ id }) => genre_ids.includes(id)),
+		[genres, genre_ids],
+	);
+
+	const stringifyGenres = movieGenres.map(({ name }) => name).join(', ');
+
+	const releaseYear = new Date(release_date).getFullYear();
+
+	return (
+		<div
+			className="flex max-h-56 cursor-pointer justify-between space-x-5 border bg-card p-6 shadow-lg hover:border-gray-300 hover:bg-accent sm:rounded-3xl"
+			onClick={() => onMovieSelect({ findId: id, genres: movieGenres })}
+		>
+			<div className="relative min-h-[231px] min-w-[154px] max-w-[154px]">
+				<ScoreCard vote_average={vote_average} />
+				<img
+					className="h-full w-full rounded-3xl object-cover shadow-lg"
+					src={getMoviePosterUrl(poster_path)}
+					alt={title}
+				/>
+			</div>
+			<div className="flex w-full flex-col space-y-2">
+				<div>
+					<h3 className="ext-lg line-clamp-1 justify-center font-bold">
+						{title}
+					</h3>
+					<span>({releaseYear})</span>
+				</div>
+				<div>
+					<div className="text-sm text-gray-400">
+						Genre: <span className="text-gray-800">{stringifyGenres}</span>
 					</div>
 				</div>
+				<p className="line-clamp-3 text-gray-500">{overview}</p>
 			</div>
 		</div>
 	);

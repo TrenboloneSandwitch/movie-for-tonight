@@ -1,4 +1,5 @@
 import { type PrismaClient } from '@prisma/client';
+import { hashSync } from 'bcryptjs';
 import { prisma } from '~/db.server';
 
 export async function cleanupDb(prisma: PrismaClient) {
@@ -39,6 +40,12 @@ const initialGenres = [
 	{ id: 37, name: 'Western' },
 ];
 
+export function createPassword(password: string) {
+	return {
+		hash: hashSync(password, 10),
+	};
+}
+
 async function seed() {
 	console.log('🌱 Seeding...');
 	console.time(`🌱 Database has been seeded`);
@@ -47,7 +54,16 @@ async function seed() {
 	await cleanupDb(prisma);
 	console.timeEnd('🧹 Cleaned up the database...');
 
-	console.time('🌱 Seeded genres...');
+	console.time('🌱 Seeding user...');
+	await prisma.user.create({
+		data: {
+			id: '1',
+			email: 'test@test.com',
+			password: { create: createPassword('pass') },
+		},
+	});
+
+	console.time('🌱 Seeding genres...');
 	await prisma.genre.createMany({
 		data: initialGenres,
 	});
