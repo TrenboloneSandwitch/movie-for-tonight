@@ -26,5 +26,6 @@ export type IconName =
 	| 'question-mark-circled'
 	| 'reset'
 	| 'sun'
+	| 'sort'
 	| 'trash'
 	| 'update';

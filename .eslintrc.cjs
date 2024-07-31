@@ -9,7 +9,7 @@ module.exports = {
 		'@remix-run/eslint-config/node',
 		'prettier',
 	],
-	plugins: ["unused-imports"],
+	plugins: ["unused-imports", "@tanstack/query"],
 	rules: {
 		'no-empty-pattern': 'off',
 		'@typescript-eslint/consistent-type-imports': [
@@ -50,7 +50,7 @@ module.exports = {
 	},
 	overrides: [
 		{
-			plugins: ['remix-react-routes'],
+			plugins: ['remix-react-routes', ],
 			files: appFiles,
 			excludedFiles: testFiles,
 			rules: {
