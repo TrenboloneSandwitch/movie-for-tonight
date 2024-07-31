@@ -29,20 +29,6 @@ model Movie {
   updatedAt   DateTime @updatedAt
 }
 
-model Session {
-  id             String   @id @default(cuid())
-  expirationDate DateTime
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
-
-  // non-unique foreign key
-  @@index([userId])
-}
-
 model Genre {
   id     Int     @id @default(autoincrement())
   name   String
@@ -61,7 +47,7 @@ model User {
   movies     Movie[]
   followedBy User[]    @relation("UserFollows")
   following  User[]    @relation("UserFollows")
-  sessions   Session[]
+  Session    Session[]
 }
 
 model Password {

@@ -3,8 +3,9 @@ import {
 	type ActionFunctionArgs,
 	type LoaderFunctionArgs,
 	type MetaFunction,
+	redirect,
 } from '@remix-run/node';
-import { json, redirect, useLoaderData } from '@remix-run/react';
+import { json, useLoaderData } from '@remix-run/react';
 import { useState } from 'react';
 import { discoverMovie$ } from '~/api';
 import { FormView, MovieSchema } from '~/components/movies/FormView';
@@ -15,6 +16,7 @@ import {
 } from '~/components/movies/types';
 import { prisma } from '~/db.server';
 import { StatusState } from '~/types';
+import { redirectWithToast } from '~/utils/toast.server';
 
 export const meta: MetaFunction = () => {
 	return [
@@ -24,28 +26,11 @@ export const meta: MetaFunction = () => {
 };
 
 export async function action({ request }: ActionFunctionArgs) {
-	// const userId = await requireUserId(request);
-	// await requireNoPassword(userId);
-
 	const formData = await request.formData();
 	const submission = await parseWithZod(formData, {
 		async: true,
 		schema: MovieSchema,
 	});
-
-	//   id          String   @id @default(cuid())
-	// apiId       Int
-	// title       String
-	// description String
-	// releaseDate DateTime
-	// alreadySeen Boolean
-	// rating      Int
-	// genres      Genre[]
-	// profilePic  String
-	// author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-	// authorId    String
-	// createdAt   DateTime @default(now())
-	// updatedAt   DateTime @updatedAt
 
 	if (submission.status === 'success') {
 		await prisma.movie.create({
@@ -68,7 +53,11 @@ export async function action({ request }: ActionFunctionArgs) {
 			},
 		});
 
-		return json({ status: 'success', submission } as const, { status: 200 });
+		return redirectWithToast('/', {
+			type: 'success',
+			title: 'Movie saved!',
+			description: 'Your movie was successfully saved to favorites.',
+		});
 	}
 
 	if (!submission.status || submission.status === 'error') {
@@ -77,71 +66,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
 	return json({ status: 'idle', submission } as const);
 }
-
-// 	// if (submission.status ) {
-// 	// 	// clear the value so we don't send the password back to the client
-// 	// 	submission.value = undefined;
-// 	// 	return json({ status: 'idle', submission } as const);
-// 	// }
-// 	// if (!submission.value) {
-// 	// 	return json({ status: 'error', submission } as const, { status: 400 });
-// 	// }
-
-// 	// const { password } = submission.value;
-
-// 	// await prisma.user.update({
-// 	// 	select: { username: true },
-// 	// 	where: { id: userId },
-// 	// 	data: {
-// 	// 		password: {
-// 	// 			create: {
-// 	// 				hash: await getPasswordHash(password),
-// 	// 			},
-// 	// 		},
-// 	// 	},
-// 	// });
-
-// 	// return redirect(`/settings/profile`, { status: 302 });
-// }
-
-// export async function action({ request }: ActionFunctionArgs) {
-// 	// const userId = await requireUserId(request);
-// 	// await requireNoPassword(userId);
-// 	const formData = await request.formData();
-// 	const submission = await parseWithZod(formData, {
-// 		async: true,
-// 		schema: MovieSchema,
-// 	});
-// 	// clear the payload so we don't send the password back to the client
-// 	submission.payload = {};
-// 	console.log('🚀 ~ action ~ submission:', submission);
-// 	return redirect('/');
-
-// 	// if (submission.status ) {
-// 	// 	// clear the value so we don't send the password back to the client
-// 	// 	submission.value = undefined;
-// 	// 	return json({ status: 'idle', submission } as const);
-// 	// }
-// 	// if (!submission.value) {
-// 	// 	return json({ status: 'error', submission } as const, { status: 400 });
-// 	// }
-
-// 	// const { password } = submission.value;
-
-// 	// await prisma.user.update({
-// 	// 	select: { username: true },
-// 	// 	where: { id: userId },
-// 	// 	data: {
-// 	// 		password: {
-// 	// 			create: {
-// 	// 				hash: await getPasswordHash(password),
-// 	// 			},
-// 	// 		},
-// 	// 	},
-// 	// });
-
-// 	// return redirect(`/settings/profile`, { status: 302 });
-// }
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const searchTerm = new URL(request.url).searchParams.get('search');
