@@ -15,7 +15,7 @@ export const ErrorList: FC<ErrorListProps> = ({ id, errors }) => {
 	return (
 		<ul id={id} className="flex flex-col gap-1">
 			{errorsToRender.map(e => (
-				<li key={e} className="text-foreground-destructive text-[10px]">
+				<li key={e} className="text-[10px] text-foreground-destructive">
 					{e}
 				</li>
 			))}

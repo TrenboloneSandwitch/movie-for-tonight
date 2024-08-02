@@ -6,6 +6,7 @@ import { AuthenticityTokenInput } from 'remix-utils/csrf/react';
 import { HoneypotInputs } from 'remix-utils/honeypot/react';
 import { z } from 'zod';
 import { useIsPending } from '~/hooks';
+import { type action } from '~/routes/movies+/new';
 import { StatusState } from '~/types';
 import { getMoviePosterUrl } from '~/utils/misc';
 import { Button } from '../Button';
@@ -44,7 +45,8 @@ export const FormView: FC<FormViewProps> = ({
 	genres,
 }) => {
 	const isPending = useIsPending();
-	const actionData = useActionData();
+	const actionData = useActionData<typeof action>();
+
 	const posterPath = getMoviePosterUrl(movie.poster_path);
 
 	const [form, fields] = useForm({
@@ -60,7 +62,7 @@ export const FormView: FC<FormViewProps> = ({
 			profilePic: posterPath,
 		},
 		shouldRevalidate: 'onInput',
-		lastSubmission: actionData?.submission,
+		lastResult: actionData?.submission,
 		onValidate({ formData }) {
 			return parseWithZod(formData, { schema: MovieSchema });
 		},

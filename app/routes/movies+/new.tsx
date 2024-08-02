@@ -61,10 +61,12 @@ export async function action({ request }: ActionFunctionArgs) {
 	}
 
 	if (!submission.status || submission.status === 'error') {
-		return json({ status: 'error', submission } as const, { status: 400 });
+		return json({ status: 'error', submission: submission.reply() } as const, {
+			status: 400,
+		});
 	}
 
-	return json({ status: 'idle', submission } as const);
+	return json({ status: 'idle', submission: submission.reply() } as const);
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

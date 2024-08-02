@@ -6,18 +6,21 @@
 
 import { PassThrough } from 'node:stream';
 
-import { type AppLoadContext, type EntryContext, createReadableStreamFromReadable } from '@remix-run/node';
+import {
+	type AppLoadContext,
+	type EntryContext,
+	createReadableStreamFromReadable,
+} from '@remix-run/node';
 import { RemixServer } from '@remix-run/react';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
-import { server } from './mocks/node'
+import { server } from './mocks/node';
 
 const ABORT_DELAY = 5_000;
 
 if (process.env.NODE_ENV === 'development') {
-	server.listen()
+	server.listen();
 }
-
 
 export default function handleRequest(
 	request: Request,
@@ -26,22 +29,22 @@ export default function handleRequest(
 	remixContext: EntryContext,
 	// This is ignored so we can keep it in the template for visibility.  Feel
 	// free to delete this parameter in your app if you're not using it!
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line unused-imports/no-unused-vars
 	loadContext: AppLoadContext,
 ) {
 	return isbot(request.headers.get('user-agent') || '')
 		? handleBotRequest(
-			request,
-			responseStatusCode,
-			responseHeaders,
-			remixContext,
-		)
+				request,
+				responseStatusCode,
+				responseHeaders,
+				remixContext,
+			)
 		: handleBrowserRequest(
-			request,
-			responseStatusCode,
-			responseHeaders,
-			remixContext,
-		);
+				request,
+				responseStatusCode,
+				responseHeaders,
+				remixContext,
+			);
 }
 
 function handleBotRequest(
