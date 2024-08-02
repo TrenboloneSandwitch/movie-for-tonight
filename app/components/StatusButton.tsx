@@ -25,7 +25,6 @@ const Status = ({
 		...spinDelay,
 	});
 
-	console.log('🚀 ~ status:', status);
 	if (status === StatusState.PENDING) {
 		return (
 			<div className="inline-flex items-center justify-center">

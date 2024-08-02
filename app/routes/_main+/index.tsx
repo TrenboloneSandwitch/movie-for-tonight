@@ -20,11 +20,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	const direction = searchParams.get('sortDirection');
 	const id = searchParams.get('sortBy');
 
-	const movies = await prisma.movie.findMany({
-		orderBy: { [id ?? 'createdAt']: direction ?? 'desc' },
-	});
+	let movies = [];
 
-	console.log('🚀 ~ loader ~ movies:', id, direction);
+	try {
+		movies = await prisma.movie.findMany({
+			orderBy: { [id ?? 'createdAt']: direction ?? 'desc' },
+		});
+
+		return json({ movies });
+	} catch (error) {
+		movies = await prisma.movie.findMany({
+			orderBy: { createdAt: 'desc' },
+		});
+
+		searchParams.delete('sortDirection');
+		searchParams.delete('sortBy');
+	}
 	return json({ movies });
 }
 
