@@ -1,14 +1,13 @@
-import { type SerializeFrom } from '@remix-run/node';
 import clsx from 'clsx';
 import { type FC } from 'react';
-import { type loader } from '~/routes/movies+/new';
-import { StatusState } from '~/types';
+
+import { type NewMovieLoader, StatusState } from '~/types';
 import { ErrorList } from '../ErrorList';
 import { MovieCard } from './MovieCard';
 import { type HandleMovieSelect } from './types';
 
 interface MovieListProps {
-	data: SerializeFrom<typeof loader>;
+	data: NewMovieLoader;
 	isPending: boolean;
 	onMovieSelect: HandleMovieSelect;
 }

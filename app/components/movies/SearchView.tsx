@@ -1,14 +1,12 @@
-import { type SerializeFrom } from '@remix-run/node';
 import { type FC } from 'react';
 import { useDelayedIsPending } from '~/hooks/useDelayedIsPending';
-import { type loader } from '~/routes/movies+/new';
-import { HTMLStatus } from '~/types';
+import { HTMLStatus, type NewMovieLoader } from '~/types';
 import { SearchBar } from '../SearchBar';
 import { MovieList } from './MovieList';
 import { type HandleMovieSelect } from './types';
 
 interface SearchViewProps {
-	data: SerializeFrom<typeof loader>;
+	data: NewMovieLoader;
 	onMovieSelect: HandleMovieSelect;
 }
 

@@ -36,7 +36,6 @@ export const SearchBar: FC<SearchBarProps> = ({
 			className="flex flex-wrap items-center justify-center gap-2"
 			onChange={e => autoSubmit && handleFormChange(e.currentTarget)}
 		>
-			{/* <HoneypotInputs /> */}
 			<div className="flex-1">
 				<Label htmlFor={id} className="sr-only">
 					Search

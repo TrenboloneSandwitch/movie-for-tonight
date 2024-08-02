@@ -1,3 +1,7 @@
+import { type SerializeFrom } from '@remix-run/node';
+import { type loader as newMovieLoader } from '~/routes/movies+/new';
+import { type loader as mainLoader } from './routes/_main+';
+
 export enum HTMLStatus {
 	POST = 'POST',
 	GET = 'GET',
@@ -12,3 +16,7 @@ export enum StatusState {
 	ERROR = 'ERROR',
 	IDLE = 'IDLE',
 }
+
+// LOADERS TYPES
+export type MainMoviesLoader = SerializeFrom<typeof mainLoader>;
+export type NewMovieLoader = SerializeFrom<typeof newMovieLoader>;

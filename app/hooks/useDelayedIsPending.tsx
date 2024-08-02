@@ -9,8 +9,9 @@ export function useDelayedIsPending({
 	formMethod,
 	delay = 400,
 	minDuration = 300,
+	...rest
 }: UseDelayedIsPendingProps = {}) {
-	const isPending = useIsPending({ formAction, formMethod });
+	const isPending = useIsPending({ ...rest, formAction, formMethod });
 	const delayedIsPending = useSpinDelay(isPending, {
 		delay,
 		minDuration,

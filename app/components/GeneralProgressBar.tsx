@@ -6,8 +6,8 @@ import { Icon } from './Icon';
 
 export const GeneralProgressBar = () => {
 	const transition = useNavigation();
-	const busy = transition.state !== 'idle';
-	const delayedPending = useSpinDelay(busy, {
+	const isBusy = transition.state !== 'idle';
+	const delayedPending = useSpinDelay(isBusy, {
 		delay: 600,
 		minDuration: 400,
 	});
@@ -37,7 +37,7 @@ export const GeneralProgressBar = () => {
 			<div
 				ref={ref}
 				className={clsx(
-					'bg-accent h-full w-0 duration-500 ease-in-out',
+					'h-full w-0 bg-secondary duration-500 ease-in-out',
 					transition.state === 'idle' &&
 						(animationComplete
 							? 'transition-none'
@@ -51,7 +51,7 @@ export const GeneralProgressBar = () => {
 					<Icon
 						name="update"
 						size="md"
-						className="text-foreground m-1 animate-spin"
+						className="m-1 animate-spin text-foreground"
 						aria-hidden
 					/>
 				</div>
