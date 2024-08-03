@@ -15,7 +15,7 @@ const getColumnHelper = () => createColumnHelper<Pick<Movie, 'title'>>();
 const getColumns = () => [
 	getColumnHelper().accessor('title', {
 		header: 'Title',
-		cell: info => <div>asd{info.getValue()}</div>,
+		cell: info => <div>{info.getValue()}</div>,
 		enableSorting: true,
 	}),
 ];

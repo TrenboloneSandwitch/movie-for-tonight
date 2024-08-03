@@ -8,12 +8,13 @@ import {
 import { json, useLoaderData } from '@remix-run/react';
 import { useState } from 'react';
 import { discoverMovie$ } from '~/api';
-import { FormView, MovieSchema } from '~/components/movies/FormView';
-import { SearchView } from '~/components/movies/SearchView';
 import {
 	type HandleMovieSelect,
 	type SelectedMovie,
-} from '~/components/movies/types';
+	SearchView,
+	FormView,
+	MovieSchema,
+} from '~/components/movies';
 import { prisma } from '~/db.server';
 import { StatusState } from '~/types';
 import { redirectWithToast } from '~/utils/toast.server';
@@ -33,31 +34,41 @@ export async function action({ request }: ActionFunctionArgs) {
 	});
 
 	if (submission.status === 'success') {
-		await prisma.movie.create({
-			data: {
-				alreadySeen: false,
-				apiId: submission.value.apiId,
-				title: submission.value.title,
-				description: submission.value.description,
-				releaseDate: submission.value.releaseDate,
-				rating: submission.value.rating,
-				genres: {
-					connect: submission.value.genres.map(({ id }) => ({ id })),
-				},
-				profilePic: submission.value.profilePic,
-				author: {
-					connect: {
-						id: '1',
-					},
-				},
-			},
-		});
+		try {
+			//  const alreadyExist = await prisma.movie.findFirst({
+			// 		where: {
+			// 		 apiId: submission.value.apiId,
 
-		return redirectWithToast('/', {
-			type: 'success',
-			title: 'Movie saved!',
-			description: 'Your movie was successfully saved to favorites.',
-		});
+			// 		},
+			// 	});
+			await prisma.movie.create({
+				data: {
+					alreadySeen: false,
+					apiId: submission.value.apiId,
+					title: submission.value.title,
+					description: submission.value.description,
+					releaseDate: submission.value.releaseDate,
+					rating: submission.value.rating,
+					genres: {
+						connect: submission.value.genres.map(({ id }) => ({ id })),
+					},
+					profilePic: submission.value.profilePic,
+					author: { connect: { id: '1' } },
+				},
+			});
+
+			return redirectWithToast('/', {
+				type: 'success',
+				title: 'Movie saved!',
+				description: 'Your movie was successfully saved to favorites.',
+			});
+		} catch (error) {
+			return redirectWithToast('/', {
+				type: 'error',
+				title: 'Error Occured!',
+				description: "We couldn't save your movie to favorites.",
+			});
+		}
 	}
 
 	if (!submission.status || submission.status === 'error') {

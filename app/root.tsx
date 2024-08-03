@@ -72,7 +72,8 @@ export default function App() {
 	const year = new Date().getFullYear();
 
 	const navLinkDefaultClassName =
-		'line-clamp-2 block  py-2 pl-8 pr-6 text-base lg:text-xl';
+		'line-clamp-2 block py-2 pl-8 pr-6 text-base lg:text-xl cursor-pointer';
+	const activeNavLinkClassName = 'bg-accent cursor-default';
 
 	return (
 		<AuthenticityTokenProvider token={data.csrfToken}>
@@ -87,7 +88,9 @@ export default function App() {
 										<NavLink
 											to="/"
 											className={({ isActive }) =>
-												clsx(navLinkDefaultClassName, isActive && 'bg-accent')
+												clsx(navLinkDefaultClassName, {
+													[activeNavLinkClassName]: isActive,
+												})
 											}
 										>
 											Home
@@ -97,7 +100,9 @@ export default function App() {
 										<NavLink
 											to="movies/new"
 											className={({ isActive }) =>
-												clsx(navLinkDefaultClassName, isActive && 'bg-accent')
+												clsx(navLinkDefaultClassName, {
+													[activeNavLinkClassName]: isActive,
+												})
 											}
 										>
 											Add

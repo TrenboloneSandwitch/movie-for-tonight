@@ -5,7 +5,7 @@ import {
 } from '@remix-run/node';
 
 import { useLoaderData } from '@remix-run/react';
-import { MoviesTable } from '~/components/movies/MoviesTable';
+import { MoviesTable } from '~/components/movies';
 import { prisma } from '~/db.server';
 
 export const meta: MetaFunction = () => {
