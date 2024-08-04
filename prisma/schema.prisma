@@ -45,9 +45,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   movies     Movie[]
-  followedBy User[]    @relation("UserFollows")
-  following  User[]    @relation("UserFollows")
-  Session    Session[]
+  followedBy User[]  @relation("UserFollows")
+  following  User[]  @relation("UserFollows")
 }
 
 model Password {

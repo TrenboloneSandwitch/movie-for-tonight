@@ -38,7 +38,6 @@ export async function action({ request }: ActionFunctionArgs) {
 			//  const alreadyExist = await prisma.movie.findFirst({
 			// 		where: {
 			// 		 apiId: submission.value.apiId,
-
 			// 		},
 			// 	});
 			await prisma.movie.create({
