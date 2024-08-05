@@ -1,14 +1,14 @@
 import { flexRender } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { type FC } from 'react';
-import { useDelayedIsPending } from '~/hooks/useDelayedIsPending';
+import { useIsPending } from '~/hooks';
 import { type MainMoviesLoader } from '~/types';
 import { TableHeader } from './TableHeader';
 import { useMoviesTable } from './useMoviesTable';
 
 export const MoviesTable: FC<MainMoviesLoader> = ({ movies }) => {
 	const { table } = useMoviesTable({ movies });
-	const isPending = useDelayedIsPending({ skipFormCheck: true });
+	const isPending = useIsPending({ skipFormCheck: true });
 
 	return (
 		<div className="p-4 font-sans">
@@ -36,7 +36,11 @@ export const MoviesTable: FC<MainMoviesLoader> = ({ movies }) => {
 						{table.getRowModel().rows.map(row => (
 							<tr key={row.id} className="border-b text-primary hover:bg-muted">
 								{row.getVisibleCells().map(cell => (
-									<td key={cell.id} className="px-6 py-4">
+									<td
+										key={cell.id}
+										className="px-6 py-4"
+										align={cell.column.columnDef.meta?.style.textAlign}
+									>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</td>
 								))}

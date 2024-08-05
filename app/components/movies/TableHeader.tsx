@@ -24,29 +24,33 @@ const getDirection = (sortedDirection: SortDirection | false) => {
 };
 
 export const TableHeader = <T,>({ header, isPending }: TableHeaderProps<T>) => {
+	const { column, id, isPlaceholder, getContext } = header;
+
 	const {
 		getCanSort,
 		getNextSortingOrder,
 		getIsSorted,
 		getToggleSortingHandler,
 		columnDef,
-	} = header.column;
+	} = column;
 
 	const canSort = getCanSort() && !isPending;
 	const sortingDirection = getNextSortingOrder();
 	const sortedDirection = getIsSorted();
 
 	return (
-		<th key={header.id} className="px-6 py-3">
-			{header.isPlaceholder ? null : (
-				<div
-					className={clsx({ 'cursor-pointer select-none': canSort })}
-					onClick={!isPending ? getToggleSortingHandler() : undefined}
-					title={getTitle(canSort, sortingDirection)}
-				>
-					{flexRender(columnDef.header, header.getContext())}
+		<th
+			key={id}
+			title={getTitle(canSort, sortingDirection)}
+			className={clsx('px-6 py-3', { 'cursor-pointer select-none': canSort })}
+			onClick={!isPending ? getToggleSortingHandler() : undefined}
+			align={columnDef.meta?.style.textAlign}
+		>
+			{isPlaceholder ? null : (
+				<>
+					{flexRender(columnDef.header, getContext())}
 					{getDirection(sortedDirection)}
-				</div>
+				</>
 			)}
 		</th>
 	);
