@@ -34,11 +34,16 @@ export const MoviesTable: FC<MainMoviesLoader> = ({ movies }) => {
 					</thead>
 					<tbody>
 						{table.getRowModel().rows.map(row => (
-							<tr key={row.id} className="border-b text-primary hover:bg-muted">
+							<tr
+								key={row.id}
+								className={clsx('border-b text-primary hover:bg-muted', {
+									'bg-accent': row.getIsSelected(),
+								})}
+							>
 								{row.getVisibleCells().map(cell => (
 									<td
 										key={cell.id}
-										className="px-6 py-4"
+										className="px-4 py-1"
 										align={cell.column.columnDef.meta?.style.textAlign}
 									>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}

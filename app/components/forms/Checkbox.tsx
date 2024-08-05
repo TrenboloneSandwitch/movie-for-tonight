@@ -9,12 +9,14 @@ import {
 import { Icon } from '../ui';
 
 interface CheckboxProps
-	extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {}
+	extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+	isIndeterminate?: boolean;
+}
 
 export const Checkbox = forwardRef<
 	ElementRef<typeof CheckboxPrimitive.Root>,
 	CheckboxProps
->(({ className, ...props }, ref) => (
+>(({ className, isIndeterminate, ...props }, ref) => (
 	<CheckboxPrimitive.Root
 		{...props}
 		ref={ref}
@@ -29,7 +31,7 @@ export const Checkbox = forwardRef<
 					'flex max-h-2 items-center justify-center text-current',
 				)}
 			>
-				<Icon name="check" />
+				{isIndeterminate ? <Icon name="minus" /> : <Icon name="check" />}
 			</CheckboxPrimitive.Indicator>
 		</div>
 	</CheckboxPrimitive.Root>

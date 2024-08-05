@@ -18,24 +18,28 @@ const getColumns = () => {
 	return [
 		columnHelper.display({
 			id: 'select',
-			header: ({ table }) => {
-				return (
-					<div className="flex justify-center align-middle">
-						<Checkbox
-							onClick={table.getToggleAllRowsSelectedHandler()}
-							checked={table.getIsAllRowsSelected()}
-						/>
-					</div>
-				);
-			},
+			enableSorting: false,
+			header: ({
+				table: {
+					getIsAllRowsSelected,
+					getIsSomeRowsSelected,
+					getToggleAllRowsSelectedHandler,
+				},
+			}) => (
+				<div className="flex justify-center align-middle">
+					<Checkbox
+						isIndeterminate={!getIsAllRowsSelected() && getIsSomeRowsSelected()}
+						onClick={getToggleAllRowsSelectedHandler()}
+						checked={getIsAllRowsSelected() || getIsSomeRowsSelected()}
+					/>
+				</div>
+			),
 			cell: ({ row }) => (
 				<div className="flex justify-center align-middle">
 					<Checkbox
-						{...{
-							checked: row.getIsSelected(),
-							disabled: !row.getCanSelect(),
-							onClick: row.getToggleSelectedHandler(),
-						}}
+						checked={row.getIsSelected()}
+						disabled={!row.getCanSelect()}
+						onClick={row.getToggleSelectedHandler()}
 					/>
 				</div>
 			),
@@ -61,10 +65,6 @@ const getColumns = () => {
 			cell: info => <ScoreCard rating={info.getValue()} isTextColored />,
 			meta: { style: { textAlign: 'right' } },
 			enableSorting: true,
-		}),
-		columnHelper.display({
-			id: 'edit',
-			cell: () => 'Edit',
 		}),
 	];
 };

@@ -81,7 +81,7 @@ export default function App() {
 					<div className="flex h-screen flex-col items-center justify-between">
 						<header className="w-full bg-muted p-4 py-6">
 							<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
-								<div className="">[TBD] Movie night 🍿</div>
+								<h1 className="">[TBD] Movie night 🍿</h1>
 								<ul className="flex overflow-y-auto overflow-x-hidden">
 									<li className="p-1 pr-0">
 										<NavLink

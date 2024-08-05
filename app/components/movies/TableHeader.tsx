@@ -42,11 +42,11 @@ export const TableHeader = <T,>({ header, isPending }: TableHeaderProps<T>) => {
 		<th
 			key={id}
 			title={getTitle(canSort, sortingDirection)}
-			className={clsx('px-6 py-3', { 'cursor-pointer select-none': canSort })}
+			className={clsx('px-4 py-3', { 'cursor-pointer select-none': canSort })}
 			onClick={!isPending ? getToggleSortingHandler() : undefined}
 			align={columnDef.meta?.style.textAlign}
 		>
-			{isPlaceholder ? null : (
+			{!isPlaceholder && (
 				<>
 					{flexRender(columnDef.header, getContext())}
 					{getDirection(sortedDirection)}
