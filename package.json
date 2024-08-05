@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
-    "build:icons": "tsx ./app/utils/build-icons.ts",
+    "build:icons": "tsx ./other/build-icons.ts",
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@remix-run/dev": "^2.9.2",
     "@remix-run/eslint-config": "^2.9.2",
-    "@sly-cli/sly": "^1.10.0",
+    "@sly-cli/sly": "^1.14.0",
     "@tanstack/eslint-plugin-query": "^5.51.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/eslint": "^8.56.10",

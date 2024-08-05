@@ -32,6 +32,26 @@ npx prisma init
 yarn prisma db seed
 ```
 
+#### Add new icon
+
+These icons were downloaded from https://icons.radix-ui.com/ which is licensed
+under MIT: https://github.com/radix-ui/icons/blob/master/LICENSE.
+
+> [!WARNING] It's important that you only add icons to this directory that the
+> application actually needs as there's no "tree-shaking" for sprites
+
+##### Add new icon
+
+```sh
+npx sly add
+```
+
+##### Update sprite
+
+```sh
+yarn icons:build
+```
+
 #### Run
 
 ```sh
