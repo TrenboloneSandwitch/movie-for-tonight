@@ -12,8 +12,7 @@ import {
 import clsx from 'clsx';
 import { AuthenticityTokenProvider } from 'remix-utils/csrf/react';
 import { HoneypotProvider } from 'remix-utils/honeypot/react';
-import { Toaster } from './components/forms/Toast';
-import { GeneralProgressBar } from './components/GeneralProgressBar';
+import { Toaster, GeneralProgressBar } from './components/ui';
 import stylesheet from './tailwind.css?url';
 import { csrf } from './utils/csrf.server';
 import { honeypot } from './utils/honeypot.server';

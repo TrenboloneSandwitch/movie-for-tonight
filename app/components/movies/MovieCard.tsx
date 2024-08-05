@@ -1,33 +1,13 @@
-import clsx from 'clsx';
 import { useMemo, type FC } from 'react';
 import { type MovieDB } from '~/api';
 import { getMoviePosterUrl } from '~/utils/misc';
+import { ScoreCard } from './ScoreCard';
 import { type Genre, type HandleMovieSelect } from './types';
 
 interface MovieCardProps extends MovieDB {
 	genres: Genre[];
 	onMovieSelect: HandleMovieSelect;
 }
-
-const ScoreCard: FC<Pick<MovieCardProps, 'vote_average'>> = ({
-	vote_average,
-}) => {
-	const isGreen = vote_average > 7.5;
-	const isRed = vote_average < 4.5;
-	const isOrange = !isRed && !isGreen;
-
-	return (
-		<div
-			className={clsx('absolute left-2 top-2 rounded-xl p-2 font-bold', {
-				'bg-green-400': isGreen,
-				'bg-yellow-400': isOrange,
-				'bg-red-500': isRed,
-			})}
-		>
-			{vote_average.toPrecision(2)}
-		</div>
-	);
-};
 
 export const MovieCard: FC<MovieCardProps> = ({
 	onMovieSelect,
@@ -58,7 +38,7 @@ export const MovieCard: FC<MovieCardProps> = ({
 			onClick={() => onMovieSelect({ findId: id, genres: movieGenres })}
 		>
 			<div className="relative min-h-[231px] min-w-[154px] max-w-[154px]">
-				<ScoreCard vote_average={vote_average} />
+				<ScoreCard rating={vote_average} className="absolute left-2 top-2" />
 				<img
 					className="h-full w-full rounded-3xl object-cover shadow-lg"
 					src={getMoviePosterUrl(poster_path)}

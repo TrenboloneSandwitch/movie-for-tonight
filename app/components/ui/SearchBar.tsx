@@ -2,8 +2,7 @@ import { Form, useSearchParams, useSubmit } from '@remix-run/react';
 import { type FC, useId } from 'react';
 import { useDebounce, useIsPending } from '~/hooks';
 import { HTMLStatus, StatusState } from '~/types';
-import { Input } from './forms/Input';
-import { Label } from './forms/Label';
+import { Input, Label } from '../forms';
 import { Icon } from './Icon';
 import { StatusButton } from './StatusButton';
 

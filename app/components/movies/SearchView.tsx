@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { useDelayedIsPending } from '~/hooks/useDelayedIsPending';
 import { HTMLStatus, type NewMovieLoader } from '~/types';
-import { SearchBar } from '../SearchBar';
+import { SearchBar } from '../ui';
 import { MovieList } from './MovieList';
 import { type HandleMovieSelect } from './types';
 

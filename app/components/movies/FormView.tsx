@@ -9,12 +9,8 @@ import { useIsPending } from '~/hooks';
 import { type action } from '~/routes/movies+/new';
 import { StatusState } from '~/types';
 import { getMoviePosterUrl } from '~/utils/misc';
-import { Button } from '../Button';
-import { Field } from '../forms/Field';
-import { MultiSelectField } from '../forms/MultiSelectField';
-import { TextAreaField } from '../forms/TextAreaField';
-import { Icon } from '../Icon';
-import { StatusButton } from '../StatusButton';
+import { InputField, MultiSelectField, TextAreaField } from '../forms';
+import { Button, Icon, StatusButton } from '../ui';
 import {
 	type SelectedMovie,
 	type HandleMovieSelect,
@@ -98,7 +94,7 @@ export const FormView: FC<FormViewProps> = ({
 				<input {...getInputProps(fields.apiId, { type: 'hidden' })} />
 				<input {...getInputProps(fields.profilePic, { type: 'hidden' })} />
 				<div className="grid grid-cols-6 gap-x-2">
-					<Field
+					<InputField
 						className="col-span-6 md:col-span-3"
 						labelProps={{ children: 'Title:', htmlFor: fields.title.id }}
 						inputProps={{
@@ -110,7 +106,7 @@ export const FormView: FC<FormViewProps> = ({
 						}}
 						errors={fields.title.errors}
 					/>
-					<Field
+					<InputField
 						className="col-span-3 md:col-span-2"
 						labelProps={{
 							children: 'Release date:',
@@ -125,7 +121,7 @@ export const FormView: FC<FormViewProps> = ({
 						}}
 						errors={fields.releaseDate.errors}
 					/>
-					<Field
+					<InputField
 						className="col-span-3 md:col-span-1"
 						labelProps={{
 							children: 'Rating:',

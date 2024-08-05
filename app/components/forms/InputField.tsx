@@ -1,22 +1,25 @@
-import { useId } from 'react';
-import { ErrorList, type ListOfErrors } from '../ErrorList';
+import { type FC, useId } from 'react';
+import { ErrorList, type ListOfErrors } from '../ui';
 import { Input } from './Input';
 import { Label } from './Label';
 
-export function Field({
-	labelProps,
-	inputProps,
-	errors,
-	className,
-}: {
+interface InputFieldProps {
 	labelProps: React.LabelHTMLAttributes<HTMLLabelElement>;
 	inputProps: React.InputHTMLAttributes<HTMLInputElement>;
 	errors?: ListOfErrors;
 	className?: string;
-}) {
+}
+
+export const InputField: FC<InputFieldProps> = ({
+	labelProps,
+	inputProps,
+	errors,
+	className,
+}) => {
 	const fallbackId = useId();
 	const id = inputProps.id ?? fallbackId;
 	const errorId = errors?.length ? `${id}-error` : undefined;
+
 	return (
 		<div className={className}>
 			<Label htmlFor={id} {...labelProps} />
@@ -31,4 +34,4 @@ export function Field({
 			</div>
 		</div>
 	);
-}
+};

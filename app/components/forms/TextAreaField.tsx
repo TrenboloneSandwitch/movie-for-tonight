@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { ErrorList, type ListOfErrors } from '../ErrorList';
+import { ErrorList, type ListOfErrors } from '../ui';
 import { Label } from './Label';
 import { TextArea } from './TextArea';
 

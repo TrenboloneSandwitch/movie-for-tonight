@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { type SVGProps, type FC } from 'react';
 import { type IconName } from '@/icon-name';
-import href from '../other/icons/sprite.svg';
+import href from '../../other/icons/sprite.svg';
 
 const sizeClassName = {
 	font: 'w-[1em] h-[1em]',

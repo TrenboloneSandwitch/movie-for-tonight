@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { type FC } from 'react';
 
 import { type NewMovieLoader, StatusState } from '~/types';
-import { ErrorList } from '../ErrorList';
+import { ErrorList } from '../ui';
 import { MovieCard } from './MovieCard';
 import { type HandleMovieSelect } from './types';
 

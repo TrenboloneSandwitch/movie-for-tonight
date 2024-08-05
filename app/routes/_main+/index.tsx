@@ -24,10 +24,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 	try {
 		movies = await prisma.movie.findMany({
+			include: { author: true, genres: true },
 			orderBy: { [id ?? 'createdAt']: direction ?? 'desc' },
 		});
-
-		return json({ movies });
 	} catch (error) {
 		movies = await prisma.movie.findMany({
 			orderBy: { createdAt: 'desc' },
@@ -36,11 +35,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
 		searchParams.delete('sortDirection');
 		searchParams.delete('sortBy');
 	}
+
 	return json({ movies });
 }
 
 export default function Index() {
 	const { movies } = useLoaderData<typeof loader>();
+
+	if (movies.length === 0) {
+		return (
+			<h2 className="p-8 text-center text-xl">
+				[TBD] Please add some movies to your favorites at first...
+			</h2>
+		);
+	}
 
 	return <MoviesTable movies={movies} />;
 }
