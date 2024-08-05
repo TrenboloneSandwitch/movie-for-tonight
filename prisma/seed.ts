@@ -1,5 +1,5 @@
 import { type PrismaClient } from '@prisma/client';
-import { hashSync } from 'bcryptjs';
+import bc from 'bcryptjs';
 import { prisma } from '~/db.server';
 
 export async function cleanupDb(prisma: PrismaClient) {
@@ -42,7 +42,7 @@ const initialGenres = [
 
 export function createPassword(password: string) {
 	return {
-		hash: hashSync(password, 10),
+		hash: bc.hashSync(password, 10),
 	};
 }
 
@@ -58,6 +58,7 @@ async function seed() {
 	await prisma.user.create({
 		data: {
 			id: '1',
+			username: 'Test User',
 			email: 'test@test.com',
 			password: { create: createPassword('pass') },
 		},
