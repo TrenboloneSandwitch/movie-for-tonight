@@ -13,6 +13,7 @@ node_modules
 /playwright/.cache/
 /tests/fixtures/email/
 /coverage
+.cache
 
 /other/cache.db
 

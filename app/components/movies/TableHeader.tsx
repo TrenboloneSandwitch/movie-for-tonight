@@ -10,14 +10,17 @@ type TableHeaderProps<TData> = {
 	isPending: boolean;
 };
 
-const getTitle = (canSort: boolean, sortingOrder: SortDirection | false) => {
+const getSortTitle = (
+	canSort: boolean,
+	sortingOrder: SortDirection | false,
+) => {
 	if (!canSort) return undefined;
 	if (sortingOrder === 'asc') return 'Sort ascending';
 	if (sortingOrder === 'desc') return 'Sort descending';
 	return 'Clear sort';
 };
 
-const getDirection = (sortedDirection: SortDirection | false) => {
+export const getDirection = (sortedDirection: SortDirection | false) => {
 	if (sortedDirection === 'asc') return ' 🔼';
 	if (sortedDirection === 'desc') return ' 🔽';
 	return null;
@@ -41,7 +44,7 @@ export const TableHeader = <T,>({ header, isPending }: TableHeaderProps<T>) => {
 	return (
 		<th
 			key={id}
-			title={getTitle(canSort, sortingDirection)}
+			title={getSortTitle(canSort, sortingDirection)}
 			className={clsx('px-4 py-3', { 'cursor-pointer select-none': canSort })}
 			onClick={!isPending ? getToggleSortingHandler() : undefined}
 			align={columnDef.meta?.style.textAlign}
