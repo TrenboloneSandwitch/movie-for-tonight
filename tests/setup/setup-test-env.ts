@@ -1,9 +1,11 @@
 import 'dotenv/config';
 
 import { installGlobals } from '@remix-run/node';
-import { beforeEach, vi, type MockInstance } from 'vitest';
+import { cleanup } from '@testing-library/react';
+import { afterEach, beforeEach, vi, type MockInstance } from 'vitest';
 
 installGlobals();
+afterEach(() => cleanup());
 
 export let consoleError: MockInstance<typeof console.error>;
 
